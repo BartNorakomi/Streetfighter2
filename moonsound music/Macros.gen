@@ -1,0 +1,222 @@
+; Macro's
+
+;page_ff:	equ	#f3b1	;#f2ca	;#f3b1
+;page_fe:	equ	#f3b0	;#f2c9	;#f3b0
+;page_fd:	equ	#f3af	;#f2c8	;#f3af
+;page_fc:	equ	#f3ae	;#f2c7	;#f3ae
+
+
+player_lives:	equ	#014e
+player_level:	equ	player_lives+1
+player_world:	equ	player_level+1
+player_bombs:	equ	player_world+1
+player_explsize:	equ	player_bombs+1
+player_difficult:	equ	player_explsize+1
+player_player:	equ	player_difficult+1
+player_rating:	equ	player_player+1
+player_language:	equ	player_rating+1
+music_on_int:		equ	player_language+1
+player_special:		equ	music_on_int+1    
+elapsed_time:		equ	player_special+1
+cur_music_chip:		equ	elapsed_time+1
+cur_screen_position:	equ	cur_music_chip+1
+lastkit:		equ     cur_screen_position+1
+boot_from_dos:		equ     lastkit+1
+sram_size:		equ	boot_from_dos+1
+gameflow_current:	equ	sram_size+1
+
+CALC_BOMB_Y:	MACRO
+		ld	a,(ix + 11)
+		dec	a
+		ld	a,128
+		jr	nz,CALC_BY@$YM
+		ld	a,144
+CALC_BY@$YM:
+		ENDM
+
+COPY:		MACRO
+		in	a,(#99)
+		rra
+		call	nc,#0100
+		ENDM
+
+;macros to load value conditionally
+;load if not same
+LDNZ:		MACRO	@REG,@VALUE
+		jr	z,LDNZ@$YM
+		ld	@REG,@VALUE
+LDNZ@$YM:
+		ENDM
+;load if same
+LDZ:		MACRO	@REG,@VALUE
+		jr	nz,LDZ@$YM
+		ld	@REG,@VALUE
+LDZ@$YM:
+		ENDM
+;load if smaller
+LDC:		MACRO	@REG,@VALUE
+		jr	nc,LDC@$YM
+		ld	@REG,@VALUE
+LDC@$YM:
+		ENDM
+;load if not smaller
+LDNC:		MACRO	@REG,@VALUE
+		jr	c,LDNC@$YM
+		ld	@REG,@VALUE
+LDNC@$YM:
+		ENDM
+
+
+ifc_inc:	MACRO	@reg
+		jr	nc,ifc_inc@$YM
+		inc	@reg
+ifc_inc@$YM:
+		ENDM
+		
+
+MUL_A_4:	MACRO	@reg
+		add	a,a	;*2
+		add	a,a     ;*4
+		ENDM
+
+MUL_A_8:	MACRO	@reg
+		add	a,a	;*2
+		add	a,a     ;*4
+		add	a,a     ;*8
+		ENDM
+
+MUL_A_16:	MACRO	@reg
+		add	a,a	;*2
+		add	a,a     ;*4
+		add	a,a     ;*8
+		add	a,a     ;*16
+		ENDM
+		
+MUL_A_32:	MACRO	@reg
+		add	a,a	;*2
+		add	a,a     ;*4
+		add	a,a     ;*8
+		add	a,a     ;*16
+		add	a,a    	;*32
+		ENDM
+
+MUL_A_64:	MACRO	@reg
+		add	a,a	;*2
+		add	a,a     ;*4
+		add	a,a     ;*8
+		add	a,a     ;*16
+		add	a,a    	;*32
+		add	a,a     ;*64
+		ENDM
+				
+;maak A absoluut (carry moet al gezet/gewist zijn!)
+ABS:		MACRO
+		jr	nc,ABS@$YM
+		neg
+ABS@$YM:
+		ENDM
+		
+; tel A bij HL op
+ADD_HL_A:       MACRO
+                add     a,l	;4
+                jr      nc,ADD@$YM	;7/12
+                inc     h	;4
+ADD@$YM:        ld      l,a	;4
+                ENDM	;19/20 (load=7)
+
+
+ADD_DE_A:	MACRO
+		add	a,e
+		jr	nc,ADDDE@$YM
+		inc	d
+ADDDE@$YM:	ld	e,a
+		ENDM
+
+ADD_BC_A:	MACRO
+		add	a,c
+		jr	nc,ADDBC@$YM
+		inc	b
+ADDBC@$YM:	ld	c,a
+		ENDM
+
+;trek A van HL af
+;let op: A moet negatief zijn, dus:
+;	ld	a,-50
+;of:
+;     ld    a,256 - 50
+;om 50 van HL af te trekken!
+SUB_HL_A:	MACRO
+		add	a,l
+		jr	c,SUBHL@$YM
+		dec	h
+SUBHL@$YM:	ld	l,a	;duurt 19/20
+		ENDM
+
+SUB_DE_A:	MACRO
+		add	a,e
+		jr	c,SUBDE@$YM
+		dec	d
+SUBDE@$YM:	ld	e,a
+		ENDM
+
+SUB_BC_A:	MACRO
+		add	a,c
+		jr	c,SUBDE@$YM
+		dec	b
+SUBDE@$YM:	ld	c,a
+		ENDM
+
+DCOMPR:     MACRO
+            ld      a,h
+            sub     d
+            jr      nz,DCOMPR@$YM   ; niet gelijk
+            ld      a,l
+            sub     e
+DCOMPR@$YM:
+		ENDM
+
+;wacht op een interrupt
+WAIT:		MACRO
+		ei
+		nop
+		halt
+		ENDM
+
+;verander geheugen #c000-#ffff
+WRITE_FF:	MACRO
+		call	#0126
+		ENDM
+
+;verander geheugen #8000-#bfff
+WRITE_FE	MACRO
+		call	#0121
+		ENDM
+
+
+;verander geheugen #4000-#7fff
+WRITE_FD:	MACRO
+		call	#011B
+		ENDM
+
+;verander geheugen #0000-#3fff
+WRITE_FC:	MACRO
+		call	#0115
+		ENDM
+
+READ_FF:	MACRO
+		call	#0135
+		ENDM
+
+READ_FE:	MACRO
+		call	#0131
+		ENDM
+
+READ_FD:	MACRO
+		call	#012D
+		ENDM
+
+READ_FC:	MACRO
+		call	#0129
+		ENDM
+		
+		

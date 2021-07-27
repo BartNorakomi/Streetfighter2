@@ -1,0 +1,16 @@
+start: equ 08000h ; last def. pass 3
+fm2_data: equ 0C7h ; last def. pass 3
+sample: equ 080B3h ; last def. pass 3
+pcm_reg: equ 07Eh ; last def. pass 3
+end: equ 08BA3h ; last def. pass 3
+ramtosram_lp: equ 08076h ; last def. pass 3
+pcm_data: equ 07Fh ; last def. pass 3
+fm2_reg: equ 0C6h ; last def. pass 3
+convert: equ 080A2h ; last def. pass 3
+fm1_data: equ 0C5h ; last def. pass 3
+ramtosram: equ 08074h ; last def. pass 3
+convert.loop: equ 080A8h ; last def. pass 3
+opl4_out_wave: equ 0806Bh ; last def. pass 3
+fm1_reg: equ 0C4h ; last def. pass 3
+set_opl4_wrt: equ 08083h ; last def. pass 3
+tonedata: equ 0805Fh ; last def. pass 3

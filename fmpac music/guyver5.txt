@@ -1,0 +1,45 @@
+Using sound:
+  Songs(TMF format) can be loaded in any free memory region. Remember the song
+  must be compiled for a certain memory location.
+  BGM2TMF now also supports sourcecode output. Songs in sourcecode output (TMS)
+  can be INCLUDEd anywhere and played in-place. No relocation is necessary. This
+  is especially nice for sound effects.
+
+  Call R_MPLAY to initialise the music.
+  Call R_MINTER every VBlank (or any other fixed interval) to play music.
+  Call R_MSTOP to stop music, or call M_PLAY to initialise another.
+
+  R_MINTER can be called while music is not playing (or paused), this is no
+  problem. R_MPLAY will automatically call R_MSTOP, so calling R_MSTOP is
+  not necessary before starting a new song.
+
+R_INITFM
+  - Initializes FM-PAC and work area
+  
+R_MPLAY
+  - In: A = No. of Repeats (0 = infinite), HL = Address of BGM data
+  - Out: A = Playing flag (0 = not playing, 255 = playing)
+
+R_SPLAY:
+  - In: HL = Address of SFX data
+  - Music must be playing for SFX to work
+
+R_PAUREP
+  - Pause / unpause music.
+
+R_MSTOP
+  - Stop music/SFX.
+
+R_MINTER
+  - Updates music/SFX.
+  - Changes: AF, AF', BC, DE, HL, HL', IX
+
+R_GETMVO
+  - Gets current Master Volumes for all channels (0-6 FM, 7-9 PSG)
+  - Master volumes: 15 = No Sound, 0 = Max Volume
+  - In: DE = pointer to 10-byte volume table
+
+R_SETMVO
+  - Set Master Volumes for all channels (0-6 FM, 7-9 PSG)
+  - Master volumes: 15 = No Sound, 0 = Max Volume
+  - In: DE = pointer to 10-byte volume table
