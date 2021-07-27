@@ -1,0 +1,1 @@
+tniasm scoreboardfacedhalsim.asm

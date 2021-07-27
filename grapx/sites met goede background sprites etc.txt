@@ -1,0 +1,6 @@
+backgrounds: http://bghq.com/bgs.php?system=snes&game=s/sf2&mode=game
+http://dsarena.free.fr/mugenlight/stages.php?refGame=0
+
+sprites: http://www.spriters-resource.com/snes/supersf2/index.html
+
+streetfighter 3: http://www.zweifuss.ca/yang/yang.htm
