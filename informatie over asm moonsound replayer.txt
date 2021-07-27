@@ -1,0 +1,13 @@
+MoonBlaster 1.4 Driver for MSX-BASIC by Albert Beevendorp
+http://msxbanzai.tni.nl/dev/software.html
+
+
+moonblaster, de tune in FM-PAC forceren, kan met een chip selectie 
+<BiFiMSX> MRC zal wel een zooi MBM files hebben die je daar zo voor kunt abusen tot je uiteindelijke tunes hebt 
+<BiFiMSX> en anders heeft 'funet' wel een zooi 
+<norakomi> waar staat die replayer ? 
+<norakomi> er zijn er natuurlijk weer 100 en veel met bugs enzo... 
+<norakomi> oude versies etc... 
+<BiFiMSX> de assembly versie van de replayer kun je op MSX-Banzai! vinden 
+<norakomi> ah ok 
+<BiFiMSX> dat is een updated source met een paar broodnodige fixes... door mij gedaan 
