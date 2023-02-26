@@ -12,6 +12,8 @@ Streetfighter:
 ;
 memInit:	
 	phase	$c000
+
+
 ;
 initMem:	
 	call	whereAmI	            ;Slot of this ROM
